@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './index.css';
+import styles from './index.less';
 import { Layout, Menu, Icon } from 'antd';
 import router from 'umi/router';
 // import { Redirect } from 'react-router';
@@ -38,7 +38,7 @@ import router from 'umi/router';
 //             <Menu.Item
 //               key="index"
 //               onClick={() => {
-//                 router.replace('/');
+//                 router.push('/');
 //               }}
 //             >
 //               <Icon type="index"></Icon>
@@ -57,7 +57,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="user01"
 //                 onClick={() => {
-//                   router.replace('/user/index');
+//                   router.push('/user/index');
 //                 }}
 //               >
 //                 用户列表
@@ -76,7 +76,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="right01"
 //                 onClick={() => {
-//                   router.replace('/right/role');
+//                   router.push('/right/role');
 //                 }}
 //               >
 //                 角色列表
@@ -84,7 +84,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="right02"
 //                 onClick={() => {
-//                   router.replace('/right/index');
+//                   router.push('/right/index');
 //                 }}
 //               >
 //                 权限列表
@@ -103,7 +103,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="goods01"
 //                 onClick={() => {
-//                   router.replace('/goods/list');
+//                   router.push('/goods/list');
 //                 }}
 //               >
 //                 商品列表
@@ -111,7 +111,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="goods02"
 //                 onClick={() => {
-//                   router.replace('/goods/params');
+//                   router.push('/goods/params');
 //                 }}
 //               >
 //                 分类参数
@@ -119,7 +119,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="goods03"
 //                 onClick={() => {
-//                   router.replace('/goods/add');
+//                   router.push('/goods/add');
 //                 }}
 //               >
 //                 添加商品
@@ -127,7 +127,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="goods04"
 //                 onClick={() => {
-//                   router.replace('/goods/sort');
+//                   router.push('/goods/sort');
 //                 }}
 //               >
 //                 商品分类
@@ -146,7 +146,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="order01"
 //                 onClick={() => {
-//                   router.replace('/order/list');
+//                   router.push('/order/list');
 //                 }}
 //               >
 //                 订单列表
@@ -165,7 +165,7 @@ import router from 'umi/router';
 //               <Menu.Item
 //                 key="chart01"
 //                 onClick={() => {
-//                   router.replace('/chart/show');
+//                   router.push('/chart/show');
 //                 }}
 //               >
 //                 数据报表
@@ -214,8 +214,7 @@ class BasicLayout extends React.Component {
         <Header className={styles.header}>header content</Header>
         <Layout className={styles.container}>
           <Sider theme="light" className={styles.sider}>
-            <div> logo </div>
-            {/* openKeys={openKeys} onOpenChange={onOpenChange} */}
+            <div className={styles.siderTitle}> -电商管理后台- </div>
             <Menu
               theme="light"
               mode="inline"
@@ -225,10 +224,10 @@ class BasicLayout extends React.Component {
               <Menu.Item
                 key="index"
                 onClick={() => {
-                  router.replace('/');
+                  router.push('/');
                 }}
               >
-                <Icon type="index"></Icon>
+                <Icon type="home"></Icon>
                 <span>首页</span>
               </Menu.Item>
 
@@ -244,7 +243,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="user01"
                   onClick={() => {
-                    router.replace('/user/index');
+                    router.push('/user/index');
                   }}
                 >
                   用户列表
@@ -263,7 +262,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="right01"
                   onClick={() => {
-                    router.replace('/right/role');
+                    router.push('/right/role');
                   }}
                 >
                   角色列表
@@ -271,7 +270,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="right02"
                   onClick={() => {
-                    router.replace('/right/index');
+                    router.push('/right/index');
                   }}
                 >
                   权限列表
@@ -290,7 +289,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="goods01"
                   onClick={() => {
-                    router.replace('/goods/list');
+                    router.push('/goods/list');
                   }}
                 >
                   商品列表
@@ -298,7 +297,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="goods02"
                   onClick={() => {
-                    router.replace('/goods/params');
+                    router.push('/goods/params');
                   }}
                 >
                   分类参数
@@ -306,7 +305,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="goods03"
                   onClick={() => {
-                    router.replace('/goods/add');
+                    router.push('/goods/add');
                   }}
                 >
                   添加商品
@@ -314,7 +313,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="goods04"
                   onClick={() => {
-                    router.replace('/goods/sort');
+                    router.push('/goods/sort');
                   }}
                 >
                   商品分类
@@ -333,7 +332,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="order01"
                   onClick={() => {
-                    router.replace('/order/list');
+                    router.push('/order/list');
                   }}
                 >
                   订单列表
@@ -352,7 +351,7 @@ class BasicLayout extends React.Component {
                 <Menu.Item
                   key="chart01"
                   onClick={() => {
-                    router.replace('/chart/show');
+                    router.push('/chart/show');
                   }}
                 >
                   数据报表

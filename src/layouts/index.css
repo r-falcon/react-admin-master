@@ -3,8 +3,7 @@
   height: 100%;
   position: relative;
 }
-
-.header {
+.wrapper .header {
   width: 100%;
   background: darkslateblue;
   color: #fff;
@@ -13,33 +12,33 @@
   position: fixed;
   top: 0;
 }
-
-.container {
+.wrapper .container {
   margin-top: 60px;
   height: calc(100% - 60px);
   position: relative;
   overflow: hidden;
 }
-
-.sider {
+.wrapper .container .sider {
   width: 250px;
 }
-
-.app {
+.wrapper .container .sider .siderTitle {
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #ddd;
+}
+.wrapper .container .app {
   overflow-y: auto;
 }
-
-.content {
+.wrapper .container .app .content {
   padding: 20px 20px 0;
   flex: 1 0 auto;
 }
-
-.main {
+.wrapper .container .app .content .main {
   padding: 20px;
   background: #fff;
 }
-
-.footer {
+.wrapper .container .app .footer {
   flex: 0 0 auto;
   text-align: center;
 }
