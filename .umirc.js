@@ -3,10 +3,10 @@ export default {
   treeShaking: true,
   // 配置式路由
   routes: [
-    // {
-    //   path: '/login',
-    //   component: '../pages/login/index',
-    // },
+    {
+      path: '/login',
+      component: '../pages/login/index',
+    },
     {
       path: '/',
       component: '../layouts/index',

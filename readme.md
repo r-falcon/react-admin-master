@@ -26,3 +26,11 @@
 - 在 src/layouts/index 文件中将导航定位到相应的页面
 
 ### 创建登录页
+
+### bug处理-登录表单
+- umi创建的项目使用的antd为3.x版本，现在将antd升级到4.x版本
+- 去官网，重新安装antd依赖
+`yarn add antd --save`
+- 会发现安装完antd4.x后，报错：Warning: [antd: Icon] Empty Icon.Icon不能正常使用
+- 首先安装图标组件包 `yarn add @ant-design/icons  --save`
+- 然后参考[官网](https://ant.design/components/icon-cn/)引入使用
