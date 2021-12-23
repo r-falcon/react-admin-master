@@ -22,3 +22,5 @@
 `umi g page index --typescript --less` --typescript,--less 约定初始化的模式，可以省略
 
 ### 创建导航条对应的空页面
+- 根据创建页面的命令添加相应的pages，并配置好相应的路由
+- 在 src/layouts/index 文件中将导航定位到相应的页面
