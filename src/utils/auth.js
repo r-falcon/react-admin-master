@@ -1,0 +1,19 @@
+export function setToken(token) {
+  return localStorage.setItem('user_token', token);
+}
+
+export function getToken() {
+  return localStorage.getItem('user_token');
+}
+
+export function isLogin() {
+  return localStorage.getItem('user_token') !== null;
+}
+
+export function setLocalUser(user) {
+  return localStorage.setItem('user', user);
+}
+
+export function getLocalUser() {
+  return localStorage.getItem('user');
+}
