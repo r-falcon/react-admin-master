@@ -11,9 +11,9 @@ export function isLogin() {
 }
 
 export function setLocalUser(user) {
-  return localStorage.setItem('user', user);
+  return localStorage.setItem('user', JSON.stringify(user));
 }
 
 export function getLocalUser() {
-  return localStorage.getItem('user');
+  return JSON.parse(localStorage.getItem('user'));
 }
