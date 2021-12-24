@@ -44,7 +44,7 @@ class Login extends React.Component {
 
           <Form
             className={styles.formBox}
-            initialValues={{ remember: true, ...getLocalUser() }}
+            initialValues={{ remember: false, ...getLocalUser() }}
             onFinish={this.onFinish}
           >
             <Form.Item name="username" rules={this.state.IPT_RULE_USERNAME}>

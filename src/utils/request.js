@@ -31,20 +31,20 @@ const request = extend({
   prefix: baseUrl,
   // 超时
   timeout: 15000,
+  // 请求头
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8',
+    Authorization: getToken() ? getToken() : null,
+  },
   // 默认请求是否带上cookie
   // credentials: 'include',
 });
 
 // request 拦截器
 request.interceptors.request.use((url, options) => {
-  const headers = {};
-  if (getToken()) {
-    headers['Authorization'] = getToken();
-  }
-  headers['Content-Type'] = 'application/json;charset=UTF-8';
   return {
     url: url,
-    options: { ...options, ...headers },
+    options: { ...options },
   };
 });
 
