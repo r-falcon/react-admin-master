@@ -1,9 +1,10 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styles from './index.less';
-import { getLocalUser } from '../../utils/auth';
-
+import { getLocalUser, setLocalUser, setToken } from '../../utils/auth';
+import { loginApi } from '../../api/login';
+import router from 'umi/router';
 class Login extends React.Component {
   state = {
     IPT_RULE_USERNAME: [
@@ -21,7 +22,17 @@ class Login extends React.Component {
   };
 
   onFinish = values => {
-    console.log('success:', values);
+    const { username, password } = values;
+    if (values.remember) {
+      setLocalUser({ username: username, password: password });
+    }
+    loginApi({ username: username, password: password })
+      .then(res => {
+        setToken(res.data.token);
+        message.success(res.meta.msg);
+        router.push('/');
+      })
+      .catch(err => console.log(err));
   };
 
   render() {

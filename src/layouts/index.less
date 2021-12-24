@@ -6,11 +6,40 @@
   .header {
     width: 100%;
     background: darkslateblue;
-    color: #fff;
     height: 60px;
     line-height: 60px;
+    color: #fff;
     position: fixed;
     top: 0;
+    display: flex;
+    justify-content: space-between;
+
+    .title{
+      font-size: 20px;
+      letter-spacing: 1px;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+
+    .headerRight{
+      display: flex;
+
+      .timer{
+        font-size: 14px;
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+
+      .avatarWrapper{
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+
+        .avatar{
+          cursor: pointer;
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
   }
 
   .container {

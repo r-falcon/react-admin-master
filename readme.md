@@ -34,3 +34,10 @@
 - 会发现安装完antd4.x后，报错：Warning: [antd: Icon] Empty Icon.Icon不能正常使用
 - 首先安装图标组件包 `yarn add @ant-design/icons  --save`
 - 然后参考[官网](https://ant.design/components/icon-cn/)引入使用
+
+### 前台端接口联调
+- 代理配置 .umirc.js文件 - proxy
+- 请求封装 umi-request
+- 安装 `yarn add umi-request --save`
+- umi-request 的二次封装： src/utils/request
+- 统一接口管理： src/api

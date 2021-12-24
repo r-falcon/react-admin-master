@@ -20,6 +20,10 @@ export default {
           component: '../pages/user/index',
         },
         {
+          path: '/center/index',
+          component: '../pages/user/center/index',
+        },
+        {
           path: '/right/role',
           component: '../pages/right/role',
         },
@@ -54,6 +58,14 @@ export default {
       ],
     },
   ],
+  // 配置代理
+  proxy: {
+    '/api': {
+      target: 'http://127.0.0.1:8888',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [

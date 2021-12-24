@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.less';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Dropdown } from 'antd';
 import {
   HomeOutlined,
   UserOutlined,
@@ -8,15 +8,50 @@ import {
   ShopOutlined,
   OrderedListOutlined,
   PieChartOutlined,
+  CaretDownOutlined,
 } from '@ant-design/icons';
 import router from 'umi/router';
 import { Redirect } from 'react-router';
-import { isLogin } from '../utils/auth';
+import { isLogin, getLocalUser } from '../utils/auth';
+import { parseTime } from '../utils/tools';
 
 class BasicLayout extends React.Component {
   state = {
     openKeys: [],
+    date: new Date(),
   };
+
+  optionsList = (
+    <Menu>
+      <Menu.Item key="1" onClick={() => router.push('/')}>
+        首页
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => router.push('/center/index')}>
+        个人中心
+      </Menu.Item>
+      <Menu.Item
+        key="3"
+        onClick={() => {
+          window.localStorage.clear();
+          window.location.reload();
+        }}
+      >
+        退出登录
+      </Menu.Item>
+    </Menu>
+  );
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.setState({
+        date: new Date(),
+      });
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
   openChange = openKeys => {
     let keysLen = openKeys.length;
@@ -38,7 +73,25 @@ class BasicLayout extends React.Component {
     if (isLogin()) {
       return (
         <Layout className={styles.wrapper}>
-          <Header className={styles.header}>Online Retailers Management System</Header>
+          <Header className={styles.header}>
+            <p className={styles.title}>Online Retailers Management System</p>
+            <div className={styles.headerRight}>
+              <span className={styles.timer}>
+                {parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}')}
+              </span>
+              <Dropdown overlay={this.optionsList} arrow>
+                <div className={styles.avatarWrapper}>
+                  <img
+                    className={styles.avatar}
+                    src={require('../assets/images/user/avatar.png')}
+                    alt="user avatar"
+                  />
+                  <span style={{ marginLeft: '10px' }}>{getLocalUser()?.username}</span>
+                  <CaretDownOutlined style={{ margin: '5px 0 0 5px' }} />
+                </div>
+              </Dropdown>
+            </div>
+          </Header>
           <Layout className={styles.container}>
             <Sider theme="light" className={styles.sider}>
               <div className={styles.siderTitle}> -电商管理后台- </div>
@@ -54,7 +107,6 @@ class BasicLayout extends React.Component {
                     router.push('/');
                   }}
                 >
-                  {/* <Icon type="home"></Icon> */}
                   <HomeOutlined />
                   <span>首页</span>
                 </Menu.Item>
@@ -63,7 +115,6 @@ class BasicLayout extends React.Component {
                   key="user"
                   title={
                     <span>
-                      {/* <Icon type="user" /> */}
                       <UserOutlined />
                       <span> 用户管理 </span>
                     </span>
@@ -83,7 +134,6 @@ class BasicLayout extends React.Component {
                   key="right"
                   title={
                     <span>
-                      {/* <Icon type="form" /> */}
                       <FormOutlined />
                       <span> 权限管理 </span>
                     </span>
@@ -111,7 +161,6 @@ class BasicLayout extends React.Component {
                   key="goods"
                   title={
                     <span>
-                      {/* <Icon type="appstore" /> */}
                       <ShopOutlined />
                       <span> 商品管理 </span>
                     </span>
@@ -155,7 +204,6 @@ class BasicLayout extends React.Component {
                   key="order"
                   title={
                     <span>
-                      {/* <Icon type="table" /> */}
                       <OrderedListOutlined />
                       <span> 订单管理 </span>
                     </span>
@@ -175,7 +223,6 @@ class BasicLayout extends React.Component {
                   key="chart"
                   title={
                     <span>
-                      {/* <Icon type="pie-chart" /> */}
                       <PieChartOutlined />
                       <span> 数据统计 </span>
                     </span>
