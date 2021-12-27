@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styles from './index.less';
-import { getLocalUser, setLocalUser, setToken } from '../../utils/auth';
+import { getLocalUser, setLocalUser, setToken, setUserInfo } from '../../utils/auth';
 import { loginApi } from '../../api/login';
 import router from 'umi/router';
 class Login extends React.Component {
@@ -23,12 +23,11 @@ class Login extends React.Component {
 
   onFinish = values => {
     const { username, password } = values;
-    if (values.remember) {
-      setLocalUser({ username: username, password: password });
-    }
+    setLocalUser({ username: username, password: password, remember: values.remember });
     loginApi({ username: username, password: password })
       .then(res => {
         setToken(res.data.token);
+        setUserInfo(res.data);
         message.success(res.meta.msg);
         router.push('/');
       })
@@ -44,7 +43,7 @@ class Login extends React.Component {
 
           <Form
             className={styles.formBox}
-            initialValues={{ remember: false, ...getLocalUser() }}
+            initialValues={getLocalUser().remember === true ? getLocalUser() : { remember: false }}
             onFinish={this.onFinish}
           >
             <Form.Item name="username" rules={this.state.IPT_RULE_USERNAME}>

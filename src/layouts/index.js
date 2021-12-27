@@ -32,7 +32,11 @@ class BasicLayout extends React.Component {
       <Menu.Item
         key="3"
         onClick={() => {
-          window.localStorage.clear();
+          // 删除全部数据
+          // window.localStorage.clear();
+          // 删除某项 数据
+          window.localStorage.removeItem('user_info');
+          window.localStorage.removeItem('user_token');
           window.location.reload();
         }}
       >
