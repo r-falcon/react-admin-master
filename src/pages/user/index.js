@@ -2,118 +2,126 @@ import React from 'react';
 // import styles from './index.less';
 import { userTable } from './service';
 import { parseTime } from '../../utils/tools';
-import { Switch, Table, Pagination } from 'antd';
-
+import { Switch, Table } from 'antd';
 class User extends React.Component {
   state = {
-    // 注意：使用table自带的分页需要一次性把数据全部请求出来
+    userList: [],
+    pagination: {
+      pageSizeOptions: ['5', '10', '20', '30', '50'],
+      defaultCurrent: 1,
+      defaultPageSize: 5,
+      showQuickJumper: true,
+      showSizeChanger: true,
+      showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`,
+    },
     queryParams: {
       query: '',
       pagenum: 1,
-      // pagesize: 5,
-      pagesize: 100,
+      pagesize: 5,
     },
-    total: 0,
-    userList: [],
+    loading: false,
   };
 
-  columns = [
-    {
-      title: '用户名',
-      dataIndex: 'username',
-    },
-    {
-      title: '角色',
-      dataIndex: 'role_name',
-    },
-    {
-      title: '邮箱',
-      dataIndex: 'email',
-    },
-    {
-      title: '手机',
-      dataIndex: 'mobile',
-    },
-    {
-      title: '启用状态',
-      dataIndex: 'mg_state',
-      render: record => {
-        return <Switch checked={record} />;
+  // 计算属性
+  get columns() {
+    return [
+      {
+        title: '序号',
+        dataIndex: 'index',
+        align: 'center',
+        render: (text, record, index) => `${index + 1}`,
       },
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'create_time',
-      render: record => {
-        return <span>{parseTime(record)}</span>;
+      {
+        title: '用户名',
+        dataIndex: 'username',
+        align: 'center',
       },
-    },
-  ];
-
-  paginationProps = {
-    showSizeChanger: true, //设置每页显示数据条数
-    showQuickJumper: false,
-    showTotal: () => `共${this.state.total}条`,
-    pageSizeOptions: [5, 10, 20, 50],
-    defaultCurrent: 1,
-    defaultPageSize: 5,
-    total: this.state.total,
-    hideOnSinglePage: true,
-    onChange: this.handlePageChange,
-  };
-
-  componentDidMount() {
-    this.getUserList(this.state.queryParams);
+      {
+        title: '角色',
+        dataIndex: 'role_name',
+        align: 'center',
+      },
+      {
+        title: '邮箱',
+        dataIndex: 'email',
+        align: 'center',
+      },
+      {
+        title: '手机',
+        dataIndex: 'mobile',
+        align: 'center',
+      },
+      {
+        title: '启用状态',
+        dataIndex: 'mg_state',
+        align: 'center',
+        render: record => {
+          return <Switch checked={record} />;
+        },
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'create_time',
+        render: record => {
+          return <span>{parseTime(record)}</span>;
+        },
+      },
+    ];
   }
 
-  getUserList = params => {
-    console.log(params);
-    userTable(params)
+  componentDidMount() {
+    this.initData({ ...this.state.queryParams });
+  }
+
+  initData = (params = {}, paginationInfo = null) => {
+    if (paginationInfo) {
+      this.setState({
+        pagination: {
+          ...this.state.pagination,
+          current: paginationInfo.current,
+          pageSize: paginationInfo.pageSize,
+        },
+      });
+      params.pagesize = paginationInfo.pageSize;
+      params.pagenum = paginationInfo.current;
+      params.query = '';
+    } else {
+      console.log(this.state);
+      params.pagesize = this.state.pagination.defaultPageSize;
+      params.pagenum = this.state.pagination.defaultCurrent;
+      params.query = '';
+    }
+
+    this.setState({
+      loading: true,
+    });
+
+    userTable({ ...params })
       .then(res => {
         this.setState({
-          total: res.data.total,
+          loading: false,
+          pagination: { ...this.state.pagination, total: res.data.total },
           userList: res.data.users,
         });
       })
       .catch(err => console.log(err));
   };
 
-  handlePageChange = page => {
-    this.getUserList({ ...this.state.queryParams, pagenum: page });
+  handleTableChange = pagination => {
+    this.initData({ ...this.state.queryParams }, { ...pagination });
   };
 
   render() {
     return (
       <div>
-        {/* 
-          table的分页有两种情况：
-            1.直接使用table自带的pagination
-            2.隐藏table的pagination，使用自定义pagination组件
-         */}
-        {/* 第一种：使用单独的分页组件.hideOnSinglePage,只有一页的时候，隐藏分页 */}
-        {/* <Table
-          bordered
-          rowKey={record => record.id}
-          columns={this.columns}
-          dataSource={this.state.userList}
-          pagination={false}
-        />
-        <Pagination
-          style={{ marginTop: '20px' }}
-          defaultCurrent={1}
-          defaultPageSize={5}
-          total={this.state.total}
-          hideOnSinglePage={true}
-          onChange={this.handlePageChange}
-        /> */}
-
-        {/* 第二种：使用table内置的分页 */}
         <Table
           bordered
           rowKey={record => record.id}
+          loading={this.state.loading}
           columns={this.columns}
           dataSource={this.state.userList}
-          pagination={this.paginationProps}
+          pagination={this.state.pagination}
+          onChange={this.handleTableChange}
         />
       </div>
     );

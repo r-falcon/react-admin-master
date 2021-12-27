@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.less';
-import { Layout, Menu, Dropdown } from 'antd';
+import { Layout, Menu, Dropdown, ConfigProvider } from 'antd';
+import ZhCN from 'antd/lib/locale-provider/zh_CN';
 import {
   HomeOutlined,
   UserOutlined,
@@ -14,7 +15,6 @@ import router from 'umi/router';
 import { Redirect } from 'react-router';
 import { isLogin, getLocalUser } from '../utils/auth';
 import { parseTime } from '../utils/tools';
-
 class BasicLayout extends React.Component {
   state = {
     openKeys: [],
@@ -245,7 +245,9 @@ class BasicLayout extends React.Component {
             </Sider>
             <Layout className={styles.app}>
               <Content className={styles.content}>
-                <div className={styles.main}>{this.props.children}</div>
+                <ConfigProvider locale={ZhCN}>
+                  <div className={styles.main}>{this.props.children}</div>
+                </ConfigProvider>
               </Content>
               <Footer className={styles.footer}>
                 OnlineRetailers ©2021 Created by XiaodaiRong
