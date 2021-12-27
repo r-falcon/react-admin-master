@@ -17,3 +17,11 @@ export function setLocalUser(user) {
 export function getLocalUser() {
   return JSON.parse(localStorage.getItem('user'));
 }
+
+export function setUserInfo(info) {
+  return localStorage.setItem('user_info', JSON.stringify(info));
+}
+
+export function getUserInfo() {
+  return JSON.parse(localStorage.getItem('user_info'));
+}
