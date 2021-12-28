@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './index.less';
 import { Card, Tabs, Form, Input, Button } from 'antd';
-import { getUserInfo } from '../../../utils/auth';
+import { getUserInfo } from '@/utils/auth';
 import { UserOutlined, MailOutlined, MobileOutlined, FieldTimeOutlined } from '@ant-design/icons';
-import { parseTime } from '../../../utils/tools';
+import { parseTime } from '@/utils/tools';
 
 const { TabPane } = Tabs;
 class Center extends React.Component {

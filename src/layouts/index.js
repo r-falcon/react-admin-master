@@ -13,8 +13,8 @@ import {
 } from '@ant-design/icons';
 import router from 'umi/router';
 import { Redirect } from 'react-router';
-import { isLogin, getLocalUser } from '../utils/auth';
-import { parseTime } from '../utils/tools';
+import { isLogin, getLocalUser } from '@/utils/auth';
+import { parseTime } from '@/utils/tools';
 class BasicLayout extends React.Component {
   state = {
     openKeys: [],

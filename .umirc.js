@@ -1,3 +1,7 @@
+/**
+ * umi 配置. 和config/config.js 二选一
+ */
+
 // ref: https://umijs.org/config/
 export default {
   treeShaking: true,
@@ -68,6 +72,7 @@ export default {
       },
     },
   },
+  // 插件配置
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
@@ -98,4 +103,6 @@ export default {
       },
     ],
   ],
+  // 配置路径别名
+  alias: { '@': require('path').resolve(__dirname, 'src') },
 };

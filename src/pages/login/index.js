@@ -2,8 +2,8 @@ import React from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styles from './index.less';
-import { getLocalUser, setLocalUser, setToken, setUserInfo } from '../../utils/auth';
-import { loginApi } from '../../api/login';
+import { getLocalUser, setLocalUser, setToken, setUserInfo } from '@/utils/auth';
+import { loginApi } from '@/services/login';
 import router from 'umi/router';
 class Login extends React.Component {
   state = {
