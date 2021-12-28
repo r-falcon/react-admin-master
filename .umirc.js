@@ -63,7 +63,9 @@ export default {
     '/api': {
       target: 'http://127.0.0.1:8888',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: {
+        '^/api': '',
+      },
     },
   },
   plugins: [
@@ -74,7 +76,14 @@ export default {
         antd: true,
         dva: true,
         dynamicImport: false,
-        title: 'react-admin',
+        title: '修改title',
+        links: [
+          {
+            rel: 'icon',
+            href: '/favicon.png',
+          },
+        ],
+
         dll: false,
 
         routes: {
