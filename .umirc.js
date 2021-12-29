@@ -81,7 +81,7 @@ export default {
         antd: true,
         dva: true,
         dynamicImport: false,
-        title: '修改title',
+        title: 'react-admin',
         links: [
           {
             rel: 'icon',
