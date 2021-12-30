@@ -132,6 +132,14 @@ class BasicLayout extends React.Component {
                   >
                     用户列表
                   </Menu.Item>
+                  <Menu.Item
+                    key="user02"
+                    onClick={() => {
+                      router.push('/userHooks/index');
+                    }}
+                  >
+                    用户列表[hooks]
+                  </Menu.Item>
                 </SubMenu>
 
                 <SubMenu

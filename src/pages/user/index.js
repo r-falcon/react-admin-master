@@ -169,11 +169,9 @@ class User extends React.Component {
       });
       params.pagesize = paginationInfo.pageSize;
       params.pagenum = paginationInfo.current;
-      params.query = '';
     } else {
       params.pagesize = this.state.pagination.defaultPageSize;
       params.pagenum = this.state.pagination.defaultCurrent;
-      params.query = '';
     }
 
     this.setState({
@@ -248,7 +246,6 @@ class User extends React.Component {
    * 详情
    */
   handleDetail = record => {
-    console.log('详情', record);
     this.setState({
       detailVisible: true,
       form: record,
@@ -256,7 +253,6 @@ class User extends React.Component {
   };
 
   clickOk = () => {
-    console.log('详情ok');
     this.setState({
       detailVisible: false,
       form: {},
@@ -264,7 +260,6 @@ class User extends React.Component {
   };
 
   clickCancel = () => {
-    console.log('详情cancel');
     this.setState({
       detailVisible: false,
       form: {},

@@ -1,7 +1,6 @@
 /**
  * umi 配置. 和config/config.js 二选一
  */
-
 // ref: https://umijs.org/config/
 export default {
   treeShaking: true,
@@ -22,6 +21,10 @@ export default {
         {
           path: '/user/index',
           component: '../pages/user/index',
+        },
+        {
+          path: '/userHooks/index',
+          component: '../pages/userHooks/index',
         },
         {
           path: '/center/index',
@@ -88,9 +91,7 @@ export default {
             href: '/favicon.png',
           },
         ],
-
         dll: false,
-
         routes: {
           exclude: [
             /models\//,
@@ -104,5 +105,7 @@ export default {
     ],
   ],
   // 配置路径别名
-  alias: { '@': require('path').resolve(__dirname, 'src') },
+  alias: {
+    '@': require('path').resolve(__dirname, 'src'),
+  },
 };
