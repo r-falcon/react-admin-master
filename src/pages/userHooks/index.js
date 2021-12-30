@@ -129,7 +129,7 @@ function UserHooks() {
   const [detailVisible, setDetailVisible] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const getList = (params = {}, paginationInfo = null) => {
+  const getList = useCallback((params = {}, paginationInfo = null) => {
     if (paginationInfo) {
       setPagination(pagination => ({
         ...pagination,
@@ -153,7 +153,7 @@ function UserHooks() {
         }));
       })
       .catch(err => console.log(err));
-  };
+  });
 
   const handleTableChange = values => {
     getList({ ...queryParams }, { ...values });
@@ -245,7 +245,7 @@ function UserHooks() {
 
   useEffect(() => {
     getList({ ...queryParams });
-  }, []);
+  }, [getList, queryParams]);
 
   return (
     <div>
