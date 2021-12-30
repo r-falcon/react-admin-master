@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { userTable, roleList } from './service';
-import {
-  Table,
-  Switch,
-  Button,
-  Popconfirm,
-  Modal,
-  Form,
-  Input,
-  Select,
-  Radio,
-  Row,
-  Col,
-} from 'antd';
+import { userTable, addUser, editUser, changeStatus, deleteUser } from './service';
+import { Table, Switch, Button, Popconfirm, Modal, Form, Input, Row, Col, message } from 'antd';
 import { parseTime } from '@/utils/tools';
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import styles from './index.less';
@@ -66,8 +54,13 @@ function UserHooks() {
       title: '启用状态',
       dataIndex: 'mg_state',
       align: 'center',
-      render: record => {
-        return <Switch checked={record} />;
+      render: (text, record, index) => {
+        return (
+          <Switch
+            checked={record.mg_state}
+            onChange={checked => handleSwitchChange(record.id, checked)}
+          />
+        );
       },
     },
     {
@@ -126,18 +119,8 @@ function UserHooks() {
    */
   const [isAdd, setIsAdd] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [roleData, setRoleData] = useState([]);
   const [form] = Form.useForm();
-  const statusOptions = [
-    {
-      value: true,
-      label: '启用',
-    },
-    {
-      value: false,
-      label: '停用',
-    },
-  ];
+  const [rowId, setRowId] = useState(null);
 
   /**
    * 详情
@@ -146,7 +129,7 @@ function UserHooks() {
   const [detailVisible, setDetailVisible] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const getList = useCallback((params = {}, paginationInfo = null) => {
+  const getList = (params = {}, paginationInfo = null) => {
     if (paginationInfo) {
       setPagination(pagination => ({
         ...pagination,
@@ -170,64 +153,76 @@ function UserHooks() {
         }));
       })
       .catch(err => console.log(err));
-  });
+  };
 
   const handleTableChange = values => {
     getList({ ...queryParams }, { ...values });
   };
 
   /**
+   * 修改状态
+   */
+  const handleSwitchChange = async (id, checked) => {
+    await changeStatus(id, checked);
+    message.success('状态修改成功！');
+    getList({ ...queryParams });
+  };
+
+  /**
    * 新增+修改
    */
-
   const handleAdd = () => {
     console.log('handle add');
-    getRoleList();
     setIsAdd(true);
     setVisible(true);
   };
 
   const handleUpdate = record => {
     console.log('update');
-    console.log(record);
-    getRoleList();
     setIsAdd(false);
+    setRowId(record.id);
     form.setFieldsValue({ ...record });
     setVisible(true);
   };
 
   const handleCancel = () => {
-    console.log('cancel');
+    reset();
+  };
+
+  const reset = () => {
     setVisible(false);
+    setRowId(null);
     form.resetFields();
   };
 
   const onFinish = values => {
-    console.log('success', values);
-  };
-
-  const getRoleList = () => {
-    roleList()
-      .then(res => {
-        var roles = [];
-        res.data.forEach(item => {
-          roles.push({
-            value: item.roleName,
-            label: item.roleName + '-' + item.roleDesc,
-          });
-        });
-        setRoleData(roles);
-      })
-      .catch(err => console.log(err));
+    if (rowId) {
+      editUser(rowId, values).then(res => {
+        message.success('修改成功！');
+        reset();
+        getList({ ...queryParams });
+      });
+    } else {
+      addUser(values)
+        .then(res => {
+          message.success('添加成功！');
+          reset();
+          getList({ ...queryParams });
+        })
+        .catch(err => console.log(err));
+    }
   };
 
   /**
    * 删除
    */
-
   const handleDelete = record => {
-    console.log('delete');
-    console.log(record);
+    deleteUser(record.id)
+      .then(res => {
+        message.success('删除成功！');
+        getList({ ...queryParams });
+      })
+      .catch(err => console.log(err));
   };
 
   /**
@@ -250,7 +245,7 @@ function UserHooks() {
 
   useEffect(() => {
     getList({ ...queryParams });
-  }, [getList, queryParams]);
+  }, []);
 
   return (
     <div>
@@ -286,21 +281,23 @@ function UserHooks() {
               },
             ]}
           >
-            <Input />
+            <Input disabled={rowId} />
           </Form.Item>
 
-          <Form.Item
-            label="角色"
-            name="role_name"
-            rules={[
-              {
-                required: true,
-                message: '请选择角色',
-              },
-            ]}
-          >
-            <Select options={roleData} />
-          </Form.Item>
+          {rowId ? null : (
+            <Form.Item
+              label="密码"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入密码',
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+          )}
 
           <Form.Item
             label="邮箱"
@@ -326,19 +323,6 @@ function UserHooks() {
             ]}
           >
             <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="状态"
-            name="mg_state"
-            rules={[
-              {
-                required: true,
-                message: '请选择状态',
-              },
-            ]}
-          >
-            <Radio.Group options={statusOptions}></Radio.Group>
           </Form.Item>
 
           <Form.Item>

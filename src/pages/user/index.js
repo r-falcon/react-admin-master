@@ -1,20 +1,8 @@
 import React from 'react';
 import styles from './index.less';
-import { userTable, roleList } from './service';
+import { userTable, addUser, editUser, changeStatus, deleteUser } from './service';
 import { parseTime } from '@/utils/tools';
-import {
-  Switch,
-  Table,
-  Button,
-  Popconfirm,
-  Form,
-  Modal,
-  Input,
-  Select,
-  Radio,
-  Row,
-  Col,
-} from 'antd';
+import { Switch, Table, Button, Popconfirm, Form, Modal, Input, Row, Col, message } from 'antd';
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 
 /**
@@ -39,10 +27,9 @@ class User extends React.Component {
     },
     loading: false,
 
-    roleList: [],
-
     visible: false,
     title: '',
+    rowId: null,
     detailVisible: false,
     isAdd: false,
 
@@ -55,17 +42,6 @@ class User extends React.Component {
   };
 
   formRef = React.createRef();
-
-  statusOptions = [
-    {
-      value: true,
-      label: '启用',
-    },
-    {
-      value: false,
-      label: '停用',
-    },
-  ];
 
   getColumns() {
     return [
@@ -99,8 +75,13 @@ class User extends React.Component {
         title: '启用状态',
         dataIndex: 'mg_state',
         align: 'center',
-        render: record => {
-          return <Switch checked={record} />;
+        render: (text, record, index) => {
+          return (
+            <Switch
+              checked={record.mg_state}
+              onChange={checked => this.handleSwitchChange(record.id, checked)}
+            />
+          );
         },
       },
       {
@@ -193,6 +174,16 @@ class User extends React.Component {
     this.initData({ ...this.state.queryParams }, { ...pagination });
   };
 
+  handleSwitchChange = (id, checked) => {
+    console.log(id, checked);
+    changeStatus(id, checked)
+      .then(res => {
+        message.success('修改状态成功！');
+        this.initData({ ...this.state.queryParams });
+      })
+      .catch(err => console.log(err));
+  };
+
   /**
    * 添加修改
    */
@@ -201,7 +192,6 @@ class User extends React.Component {
       visible: true,
       isAdd: true,
     });
-    this.getRoleList();
   };
 
   handleUpdate = record => {
@@ -209,37 +199,40 @@ class User extends React.Component {
     this.setState({
       visible: true,
       isAdd: false,
+      rowId: record.id,
     });
-    this.getRoleList();
   };
 
   onFinish = values => {
-    console.log('form finished');
-    console.log(values);
+    if (this.state.rowId) {
+      editUser(this.state.rowId, values)
+        .then(res => {
+          message.success('修改成功！');
+          this.reset();
+          this.initData({ ...this.state.queryParams });
+        })
+        .catch(err => console.log(err));
+    } else {
+      addUser(values)
+        .then(res => {
+          message.success('添加成功！');
+          this.reset();
+          this.initData({ ...this.state.queryParams });
+        })
+        .catch(err => console.log(err));
+    }
   };
 
   onCancel = () => {
+    this.reset();
+  };
+
+  reset = () => {
     this.formRef.current.resetFields();
     this.setState({
       visible: false,
+      rowId: null,
     });
-  };
-
-  getRoleList = () => {
-    roleList()
-      .then(res => {
-        var roles = [];
-        res.data.forEach(item => {
-          roles.push({
-            value: item.roleName,
-            label: item.roleName + '-' + item.roleDesc,
-          });
-        });
-        this.setState({
-          roleList: roles,
-        });
-      })
-      .catch(err => console.log(err));
   };
 
   /**
@@ -270,8 +263,22 @@ class User extends React.Component {
    * 删除
    */
   handleDelete = record => {
-    console.log('handle delete');
-    console.log(record.id);
+    deleteUser(record.id)
+      .then(res => {
+        message.success('删除成功！');
+        this.initData({ ...this.state.queryParams });
+      })
+      .catch(err => console.log(err));
+  };
+
+  /**
+   * 卸载
+   */
+
+  componentWillUnmount = () => {
+    this.setState = (state, callback) => {
+      return;
+    };
   };
 
   render() {
@@ -305,30 +312,32 @@ class User extends React.Component {
         >
           <Form {...this.layout} labelAlign="left" ref={this.formRef} onFinish={this.onFinish}>
             <Form.Item
-              label="用户名"
+              label="用户"
               name="username"
               rules={[
                 {
                   required: true,
-                  message: '请输入用户名',
+                  message: '请输入用户',
                 },
               ]}
             >
               <Input />
             </Form.Item>
 
-            <Form.Item
-              label="用户角色"
-              name="role_name"
-              rules={[
-                {
-                  required: true,
-                  message: '请选择用户角色',
-                },
-              ]}
-            >
-              <Select options={this.state.roleList} />
-            </Form.Item>
+            {this.state.isAdd ? (
+              <Form.Item
+                label="密码"
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入密码',
+                  },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+            ) : null}
 
             <Form.Item
               label="邮箱"
@@ -336,7 +345,7 @@ class User extends React.Component {
               rules={[
                 {
                   required: true,
-                  message: '请输入邮箱地址',
+                  message: '请输入邮箱',
                 },
               ]}
             >
@@ -354,19 +363,6 @@ class User extends React.Component {
               ]}
             >
               <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="启用状态"
-              name="mg_state"
-              rules={[
-                {
-                  required: true,
-                  message: '请输入启用状态',
-                },
-              ]}
-            >
-              <Radio.Group options={this.statusOptions}></Radio.Group>
             </Form.Item>
 
             <Form.Item>
