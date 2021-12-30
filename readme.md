@@ -40,4 +40,14 @@
 - 请求封装 umi-request
 - 安装 `yarn add umi-request --save`
 - umi-request 的二次封装： src/utils/request
-- 统一接口管理： src/api
+- 统一接口管理： src/services
+
+### git提交出错
+- 报错信息
+`husky > pre-commit hook failed (add --no-verify to bypass)`,的解决办法
+- 解决办法[用第三种方法解决]
+- 卸载husky。只要把项目的package.json文件中devDependencies节点下的husky库删掉，然后重新npm i 一次即可。或者直接在项目根目录下执行npm uninstall husky --save也可以，再次提交，自动化测试功能就屏蔽掉
+- 进入项目的.git文件夹(文件夹默认隐藏,可先设置显示或者命令ls查找),再进入hooks文件夹,删除pre-commit文件,重新git commit -m 'xxx' git push即可。
+- 将git commit -m "XXX" 改为 git commit --no-verify -m "XXX"
+
+
