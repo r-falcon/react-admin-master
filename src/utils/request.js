@@ -42,6 +42,9 @@ const request = extend({
 
 // request 拦截器
 request.interceptors.request.use((url, options) => {
+  if (getToken()) {
+    options = { ...options, Authorization: getToken() };
+  }
   return {
     url: url,
     options: { ...options },

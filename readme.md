@@ -1,3 +1,12 @@
+### commit 规范
+- feat: ⼀个新特性,(新功能)
+- fix: 修了⼀个 Bug
+- docs: 更新了⽂档（⽐如改了 Readme）
+- style: 代码的样式美化，不涉及到功能修改（⽐如改了缩进，css 修改不算）
+- refactor: ⼀些代码结构上优化，既不是新特性也不是修 Bug（⽐如函数改个名字）
+- perf: 优化了性能的代码改动
+- test: 新增或者修改已有的测试代码
+- chore: 跟仓库主要业务⽆关的构建/⼯程依赖/⼯具等功能改动（⽐如新增⼀个⽂档⽣成⼯具）
 ### 搭建项目
 
 - 创建文件夹 `mkdir myapp`
@@ -45,9 +54,17 @@
 ### git提交出错
 - 报错信息
 `husky > pre-commit hook failed (add --no-verify to bypass)`,的解决办法
-- 解决办法[用第三种方法解决]
+- 解决办法[用第三种方法解决,第二种方法删除pre-commit再次提交也可以成功]
 - 卸载husky。只要把项目的package.json文件中devDependencies节点下的husky库删掉，然后重新npm i 一次即可。或者直接在项目根目录下执行npm uninstall husky --save也可以，再次提交，自动化测试功能就屏蔽掉
 - 进入项目的.git文件夹(文件夹默认隐藏,可先设置显示或者命令ls查找),再进入hooks文件夹,删除pre-commit文件,重新git commit -m 'xxx' git push即可。
 - 将git commit -m "XXX" 改为 git commit --no-verify -m "XXX"
+
+### this.setState 不能及时获得最新信息问题
+- 由于this.setState 是异步，所以调用this.setState后，立即调用this.state不能获得最新的数据
+解决：
+- 回调函数：this.setState({val:this.state.val + 1},() => console.log(this.state.val))
+- componentDidUpdate：在this.setState()之后，去componentDidUpdate()函数中调用this.state,此时数据已经更新
+- 将this.setState()放入setTimeout函数中，let self= this;setTimeout(function () {self.setState({    val:self.state.val+1});  console.log(self.state.val);})
+
 
 

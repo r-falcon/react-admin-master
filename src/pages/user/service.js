@@ -1,13 +1,18 @@
 import request from '../../utils/request';
 
-export const userTable = params => request.get('/api/private/v1/users', { params: params });
+const request_api = '/api/private/v1/';
 
-export const roleList = () => request.get('/api/private/v1/roles');
+export const userTable = params => request.get(`${request_api}users`, { params: params });
 
-export const addUser = data => request.post('/api/private/v1/users', { data: data });
+export const roleList = () => request.get(`${request_api}roles`);
 
-export const editUser = (id, data) => request.put(`/api/private/v1/users/${id}`, { data: data });
+export const addUser = data => request.post(`${request_api}users`, { data: data });
 
-export const changeStatus = (id, type) => request.put(`/api/private/v1/users/${id}/state/${type}`);
+export const editUser = (id, data) => request.put(`${request_api}users/${id}`, { data: data });
 
-export const deleteUser = id => request.delete(`/api/private/v1/users/${id}`);
+export const changeStatus = (id, type) => request.put(`${request_api}users/${id}/state/${type}`);
+
+export const deleteUser = id => request.delete(`${request_api}users/${id}`);
+
+export const setterUser = (id, rid) =>
+  request.put(`${request_api}users/${id}/role`, { data: { rid: rid } });

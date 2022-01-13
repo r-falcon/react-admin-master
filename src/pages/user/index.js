@@ -1,9 +1,32 @@
 import React from 'react';
 import styles from './index.less';
-import { userTable, addUser, editUser, changeStatus, deleteUser } from './service';
+import {
+  userTable,
+  addUser,
+  editUser,
+  changeStatus,
+  deleteUser,
+  roleList,
+  setterUser,
+} from './service';
 import { parseTime } from '@/utils/tools';
-import { Switch, Table, Button, Popconfirm, Form, Modal, Input, Row, Col, message } from 'antd';
-import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import {
+  Switch,
+  Table,
+  Button,
+  Popconfirm,
+  Form,
+  Modal,
+  Input,
+  Row,
+  Col,
+  Select,
+  message,
+} from 'antd';
+import { EditOutlined, DeleteOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons';
+
+const { Search } = Input;
+const { Option } = Select;
 
 /**
  * 关于form表单控制，推荐使用useForm进行局部控制，
@@ -32,8 +55,11 @@ class User extends React.Component {
     rowId: null,
     detailVisible: false,
     isAdd: false,
+    settingVisible: false,
 
     form: {},
+    roleData: [],
+    rid: '',
   };
 
   layout = {
@@ -128,6 +154,15 @@ class User extends React.Component {
                 size="small"
                 onClick={() => this.handleDetail(record)}
               />
+
+              <Button
+                shape="circle"
+                style={{ background: '#E6A23C', color: '#fff' }}
+                icon={<SettingOutlined />}
+                className={styles.btnStyle}
+                size="small"
+                onClick={() => this.handleSetting(record)}
+              />
             </div>
           );
         },
@@ -139,6 +174,9 @@ class User extends React.Component {
     this.initData({ ...this.state.queryParams });
   }
 
+  /**
+   * 数据初始化
+   */
   initData = (params = {}, paginationInfo = null) => {
     if (paginationInfo) {
       this.setState({
@@ -155,25 +193,49 @@ class User extends React.Component {
       params.pagenum = this.state.pagination.defaultCurrent;
     }
 
-    this.setState({
-      loading: true,
-    });
-
-    userTable({ ...params })
-      .then(res => {
-        this.setState({
-          loading: false,
-          pagination: { ...this.state.pagination, total: res.data.total },
-          userList: res.data.users,
-        });
-      })
-      .catch(err => console.log(err));
+    this.getList(params);
   };
 
+  getList = async params => {
+    try {
+      this.setState({
+        loading: true,
+      });
+      const res = await userTable({ ...params });
+      this.setState({
+        loading: false,
+        pagination: { ...this.state.pagination, total: res.data.total },
+        userList: res.data.users,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  /**
+   * 模糊搜索
+   */
+  handleSearch = value => {
+    this.setState(
+      {
+        queryParams: { ...this.state.queryParams, query: value },
+      },
+      () => {
+        this.initData({ ...this.state.queryParams });
+      },
+    );
+  };
+
+  /**
+   * 分页变动
+   */
   handleTableChange = pagination => {
     this.initData({ ...this.state.queryParams }, { ...pagination });
   };
 
+  /**
+   * 用户状态修改
+   */
   handleSwitchChange = (id, checked) => {
     console.log(id, checked);
     changeStatus(id, checked)
@@ -272,9 +334,64 @@ class User extends React.Component {
   };
 
   /**
+   * 分配权限
+   */
+  handleSetting = record => {
+    this.getRoleList();
+    this.setState({
+      settingVisible: true,
+      form: record,
+    });
+  };
+
+  getRoleList = async () => {
+    try {
+      const res = await roleList();
+      this.setState({
+        roleData: res.data,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  handleRoleSelect = value => {
+    this.setState({
+      rid: value,
+    });
+  };
+
+  setOk = async () => {
+    if (this.state.rid === '') {
+      message.success('维持原角色不变!');
+      this.setReset();
+    } else {
+      try {
+        const res = await setterUser(this.state.form.id, this.state.rid);
+        message.success('分配角色成功！');
+        this.setReset();
+        this.initData({ ...this.state.queryParams });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  setCancel = () => {
+    this.setReset();
+  };
+
+  setReset = () => {
+    this.setState({
+      settingVisible: false,
+      form: {},
+      rid: '',
+    });
+  };
+
+  /**
    * 卸载
    */
-
   componentWillUnmount = () => {
     this.setState = (state, callback) => {
       return;
@@ -282,30 +399,49 @@ class User extends React.Component {
   };
 
   render() {
+    const {
+      form,
+      loading,
+      userList,
+      pagination,
+      isAdd,
+      visible,
+      detailVisible,
+      settingVisible,
+      roleData,
+    } = this.state;
     return (
       <div>
-        <Button
-          type="primary"
-          size="small"
-          className={styles.addBtn}
-          onClick={() => this.handleAdd()}
-        >
-          + 新增
-        </Button>
+        <div className={styles.header}>
+          <Search
+            placeholder="请输入关键字进行搜索"
+            className={styles.search}
+            onSearch={this.handleSearch}
+          />
+
+          <Button
+            type="primary"
+            size="small"
+            className={styles.addBtn}
+            onClick={() => this.handleAdd()}
+          >
+            + 新增
+          </Button>
+        </div>
 
         <Table
           bordered
           rowKey={record => record.id}
-          loading={this.state.loading}
+          loading={loading}
           columns={this.getColumns()}
-          dataSource={this.state.userList}
-          pagination={this.state.pagination}
+          dataSource={userList}
+          pagination={pagination}
           onChange={this.handleTableChange}
         />
 
         <Modal
-          title={this.state.isAdd ? '添加信息' : '修改信息'}
-          visible={this.state.visible}
+          title={isAdd ? '添加信息' : '修改信息'}
+          visible={visible}
           forceRender={true}
           footer={null}
           onCancel={this.onCancel}
@@ -321,10 +457,10 @@ class User extends React.Component {
                 },
               ]}
             >
-              <Input />
+              <Input disabled={!isAdd} />
             </Form.Item>
 
-            {this.state.isAdd ? (
+            {isAdd ? (
               <Form.Item
                 label="密码"
                 name="password"
@@ -375,17 +511,41 @@ class User extends React.Component {
 
         <Modal
           title="详情信息"
-          visible={this.state.detailVisible}
+          visible={detailVisible}
           onOk={this.clickOk}
           onCancel={this.clickCancel}
         >
           <Row>
-            <Col span={12}>用户名：{this.state.form.username}</Col>
-            <Col span={12}>角 色：{this.state.form.role_name}</Col>
-            <Col span={12}>邮 箱：{this.state.form.email}</Col>
-            <Col span={12}>手 机：{this.state.form.mobile}</Col>
-            <Col span={12}>状 态：{this.state.form.mg_state === true ? '启用' : '停用'}</Col>
+            <Col span={12}>用户名：{form.username}</Col>
+            <Col span={12}>角 色：{form.role_name}</Col>
+            <Col span={12}>邮 箱：{form.email}</Col>
+            <Col span={12}>手 机：{form.mobile}</Col>
+            <Col span={12}>状 态：{form.mg_state === true ? '启用' : '停用'}</Col>
           </Row>
+        </Modal>
+
+        <Modal
+          title="分配权限"
+          visible={settingVisible}
+          onOk={this.setOk}
+          onCancel={this.setCancel}
+        >
+          <p>当前用户：{form.username}</p>
+          <p>当前角色：{form.role_name}</p>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            分配角色：
+            <Select
+              style={{ width: '50%' }}
+              defaultValue={form.role_name}
+              onChange={this.handleRoleSelect}
+            >
+              {roleData.map(item => (
+                <Option key={item.id} value={item.id}>
+                  {item.roleName}
+                </Option>
+              ))}
+            </Select>
+          </div>
         </Modal>
       </div>
     );

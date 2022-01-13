@@ -23,10 +23,6 @@ export default {
           component: '../pages/user/index',
         },
         {
-          path: '/userHooks/index',
-          component: '../pages/userHooks/index',
-        },
-        {
           path: '/center/index',
           component: '../pages/user/center/index',
         },
@@ -53,10 +49,6 @@ export default {
         {
           path: '/goods/sort',
           component: '../pages/goods/sort',
-        },
-        {
-          path: '/order/list',
-          component: '../pages/order/list',
         },
         {
           path: '/chart/show',
