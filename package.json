@@ -16,6 +16,11 @@
     "react-dom": "^16.8.6",
     "umi-request": "^1.4.0"
   },
+  "husky":{
+    "hooks":{
+      "commit-msg":"commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
     "eslint": "^5.4.0",
