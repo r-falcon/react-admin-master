@@ -12,15 +12,4 @@
  * chore：跟仓库主要业务⽆关的构建/⼯程依赖/⼯具等功能改动（⽐如新增⼀个⽂档⽣成⼯具）
  */
 
-module.exports = {
-  extends: ['@commitlint/config-conventional'],
-  rules: {
-    'type-enum': [
-      2,
-      'always',
-      ['feat', 'upd', 'del', 'fix', 'refactor', 'test', 'perf', 'docs', 'style', 'revert', 'chore'],
-    ],
-    'subject-full-stop': [0, 'never'],
-    'subject-case': [0, 'never'],
-  },
-};
+"module.exports = {extends: ['@commitlint/config-conventional'],rules: {'type-enum': [2,'always',['feat', 'upd', 'del', 'fix', 'refactor', 'test', 'perf', 'docs', 'style', 'revert', 'chore']],'subject-full-stop': [0, 'never'],'subject-case': [0, 'never']}}";
