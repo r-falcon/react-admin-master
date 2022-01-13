@@ -230,7 +230,6 @@ class User extends React.Component {
    * 分页变动
    */
   handleTableChange = pagination => {
-    console.log('change', pagination);
     this.initData({ ...this.state.queryParams }, { ...pagination });
   };
 
