@@ -36,7 +36,8 @@ class User extends React.Component {
   state = {
     userList: [],
     pagination: {
-      pageSizeOptions: ['5', '10', '20', '30', '50'],
+      // pageSizeOptions: ['5', '10', '20', '30', '50'],
+      pageSizeOptions: ['1', '5', '10', '20', '30', '50'],
       defaultCurrent: 1,
       defaultPageSize: 5,
       showQuickJumper: true,
@@ -367,7 +368,7 @@ class User extends React.Component {
       this.setReset();
     } else {
       try {
-        const res = await setterUser(this.state.form.id, this.state.rid);
+        await setterUser(this.state.form.id, this.state.rid);
         message.success('分配角色成功！');
         this.setReset();
         this.initData({ ...this.state.queryParams });

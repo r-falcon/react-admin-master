@@ -66,5 +66,8 @@
 - componentDidUpdate：在this.setState()之后，去componentDidUpdate()函数中调用this.state,此时数据已经更新
 - 将this.setState()放入setTimeout函数中，let self= this;setTimeout(function () {self.setState({    val:self.state.val+1});  console.log(self.state.val);})
 
-
-
+### 利用form表单报错
+`TypeError: Cannot read property ‘setFieldsValue’ of null`
+解决：
+- 设置一个100毫秒延迟： setTimeout(() => {this.infoFormRef.current.setFieldsValue(userInfo)}, 100);
+- 将form表单组件化
