@@ -4,12 +4,15 @@
   align-items: center;
   margin: 10px 0;
 }
+
 .header .search {
   width: 240px;
 }
+
 .header .addBtn {
   font-size: 12px;
 }
+
 .btnStyle {
   margin-left: 10px;
 }

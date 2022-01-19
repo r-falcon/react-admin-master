@@ -47,8 +47,12 @@ export default {
           component: '../pages/goods/add',
         },
         {
-          path: '/goods/sort',
-          component: '../pages/goods/sort',
+          path: '/goods/demo',
+          component: '../pages/goods/demo',
+        },
+        {
+          path: '/order/list',
+          component: '../pages/order/index',
         },
         {
           path: '/chart/show',

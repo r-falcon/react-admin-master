@@ -1,3 +1,5 @@
-import request from '../utils/request';
+import request from '@/utils/request';
 
-export const loginApi = data => request.post('/api/private/v1/login', { data: data });
+const request_api = '/api/private/v1/';
+
+export const loginApi = data => request.post(`${request_api}login`, { data: data });

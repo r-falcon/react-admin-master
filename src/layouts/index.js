@@ -186,22 +186,14 @@ class BasicLayout extends React.Component {
                   >
                     分类参数
                   </Menu.Item>
-                  <Menu.Item
+                  {/* <Menu.Item
                     key="goods03"
                     onClick={() => {
-                      router.push('/goods/add');
+                      router.push('/goods/demo');
                     }}
                   >
-                    添加商品
-                  </Menu.Item>
-                  <Menu.Item
-                    key="goods04"
-                    onClick={() => {
-                      router.push('/goods/sort');
-                    }}
-                  >
-                    商品分类
-                  </Menu.Item>
+                    dva数据管理
+                  </Menu.Item> */}
                 </SubMenu>
 
                 <SubMenu

@@ -1,9 +1,9 @@
-import styles from './show.less';
+import React from 'react';
 
-export default function() {
-  return (
-    <div className={styles.normal}>
-      <h1>数据报表</h1>
-    </div>
-  );
+class Chart extends React.Component {
+  render() {
+    return <div>数据报表</div>;
+  }
 }
+
+export default Chart;
