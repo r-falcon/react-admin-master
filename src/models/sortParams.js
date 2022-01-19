@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import { goodsSort } from '@/services/common';
 
 export default {
