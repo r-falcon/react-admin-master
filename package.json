@@ -4,8 +4,6 @@
     "start": "umi dev",
     "build": "umi build",
     "test": "umi test",
-    "lint": "eslint {src,mock,tests}/**/*.{js,jsx} --fix",
-    "precommit": "lint-staged",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -19,32 +17,28 @@
     "umi-request": "^1.4.0",
     "wangeditor": "^4.7.11"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "devDependencies": {
-    "babel-eslint": "^9.0.0",
-    "eslint": "^5.4.0",
-    "eslint-config-umi": "^1.4.0",
-    "eslint-plugin-flowtype": "^2.50.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.11.1",
-    "husky": "^7.0.0",
-    "lint-staged": "^7.2.2",
+    "@commitlint/config-conventional": "^16.2.1",
+    "commitizen": "^4.2.4",
+    "commitlint": "^16.2.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "prettier": "^2.5.1",
     "react-test-renderer": "^16.7.0",
     "umi": "^2.7.7",
     "umi-plugin-react": "^1.8.4"
   },
-  "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "engines": {
     "node": ">=8.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
