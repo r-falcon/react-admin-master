@@ -1,8 +1,6 @@
 import React from 'react'
-// import * as echarts from 'echarts'
 import EChartsReact from 'echarts-for-react'
 import { echartsData } from './service'
-
 class Chart extends React.Component {
   state = {
     chartInfo: {}
@@ -65,7 +63,6 @@ class Chart extends React.Component {
         ) : (
           <EChartsReact option={this.getOptions(chartInfo)} lazyUpdate={true} />
         )}
-        <p>123456</p>
       </div>
     )
   }
