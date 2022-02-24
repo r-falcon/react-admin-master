@@ -1,31 +1,31 @@
-import React from 'react';
-import * as echarts from 'echarts';
-import EChartsReact from 'echarts-for-react';
-import { echartsData } from './service';
+import React from 'react'
+// import * as echarts from 'echarts'
+import EChartsReact from 'echarts-for-react'
+import { echartsData } from './service'
 
 class Chart extends React.Component {
   state = {
-    chartInfo: {},
-  };
+    chartInfo: {}
+  }
 
   componentDidMount() {
-    this.getChartData();
+    this.getChartData()
   }
 
   getChartData = async () => {
     try {
-      const res = await echartsData();
+      const res = await echartsData()
       this.setState({
-        chartInfo: res.data,
-      });
+        chartInfo: res.data
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   getOptions = chartInfo => {
-    console.log('render data');
-    console.log(chartInfo);
+    console.log('render data')
+    console.log(chartInfo)
 
     const options = {
       tooltip: {
@@ -33,31 +33,31 @@ class Chart extends React.Component {
         axisPointer: {
           type: 'cross',
           label: {
-            backgroundColor: '#6a7985',
-          },
-        },
+            backgroundColor: '#6a7985'
+          }
+        }
       },
       legend: chartInfo.legend,
       toolbox: {
         feature: {
-          saveAsImage: {},
-        },
+          saveAsImage: {}
+        }
       },
       grid: {
         left: '3%',
         right: '4%',
         bottom: '3%',
-        containLabel: true,
+        containLabel: true
       },
       xAxis: chartInfo.xAxis,
       yAxis: chartInfo.yAxis,
-      series: chartInfo.series,
-    };
-    return options;
-  };
+      series: chartInfo.series
+    }
+    return options
+  }
 
   render() {
-    const { chartInfo } = this.state;
+    const { chartInfo } = this.state
     return (
       <div>
         {JSON.stringify(chartInfo) === '{}' ? (
@@ -65,9 +65,10 @@ class Chart extends React.Component {
         ) : (
           <EChartsReact option={this.getOptions(chartInfo)} lazyUpdate={true} />
         )}
+        <p>123456</p>
       </div>
-    );
+    )
   }
 }
 
-export default Chart;
+export default Chart
