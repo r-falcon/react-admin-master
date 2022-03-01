@@ -1,17 +1,17 @@
-import React from 'react';
-import { goodsList, goodsDelete } from './service';
-import { Table, Button, Input, Popconfirm, message } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import router from 'umi/router';
-import { parseTime } from '@/utils/tools';
+import React from 'react'
+import { goodsList, goodsDelete } from './service'
+import { Table, Button, Input, Popconfirm, message } from 'antd'
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import router from 'umi/router'
+import { parseTime } from '@/utils/tools'
 
-const { Search } = Input;
+const { Search } = Input
 class Goods extends React.Component {
   state = {
     queryParams: {
       query: '',
       pagenum: 1,
-      pagesize: 5,
+      pagesize: 5
     },
     allList: [],
     pagination: {
@@ -20,10 +20,11 @@ class Goods extends React.Component {
       defaultPageSize: 5,
       showQuickJumper: true,
       showSizeChanger: true,
-      showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`,
+      showTotal: (total, range) =>
+        `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
     },
-    loading: false,
-  };
+    loading: false
+  }
 
   getColumns() {
     return [
@@ -31,39 +32,39 @@ class Goods extends React.Component {
         title: '序号',
         dataIndex: 'index',
         align: 'center',
-        render: (text, record, index) => `${index + 1}`,
+        render: (text, record, index) => `${index + 1}`
       },
       {
         title: '商品名称',
         dataIndex: 'goods_name',
-        align: 'center',
+        align: 'center'
       },
       {
         title: '商品价格',
         dataIndex: 'goods_price',
-        align: 'center',
+        align: 'center'
       },
       {
         title: '商品数量',
         dataIndex: 'goods_number',
-        align: 'center',
+        align: 'center'
       },
       {
         title: '商品重量',
         dataIndex: 'goods_weight',
-        align: 'center',
+        align: 'center'
       },
       {
         title: '创建时间',
         dataIndex: 'add_time',
         align: 'center',
-        render: (text, record, index) => parseTime(record.add_time),
+        render: (text, record) => parseTime(record.add_time)
       },
       {
         title: '操作',
         dataIndex: 'option',
         align: 'center',
-        render: (text, record, index) => {
+        render: (text, record) => {
           return (
             <div>
               <Button
@@ -89,14 +90,14 @@ class Goods extends React.Component {
                 />
               </Popconfirm>
             </div>
-          );
-        },
-      },
-    ];
+          )
+        }
+      }
+    ]
   }
 
   componentDidMount() {
-    this.initData({ ...this.state.queryParams });
+    this.initData({ ...this.state.queryParams })
   }
 
   initData = (params = {}, paginationInfo = null) => {
@@ -105,41 +106,41 @@ class Goods extends React.Component {
         pagination: {
           ...this.state.pagination,
           current: paginationInfo.current,
-          pageSize: paginationInfo.pageSize,
-        },
-      });
-      params.pagesize = paginationInfo.pageSize;
-      params.pagenum = paginationInfo.current;
+          pageSize: paginationInfo.pageSize
+        }
+      })
+      params.pagesize = paginationInfo.pageSize
+      params.pagenum = paginationInfo.current
     } else {
-      params.pagesize = this.state.pagination.defaultPageSize;
-      params.pagenum = this.state.pagination.defaultCurrent;
+      params.pagesize = this.state.pagination.defaultPageSize
+      params.pagenum = this.state.pagination.defaultCurrent
     }
 
-    this.getList(params);
-  };
+    this.getList(params)
+  }
 
   getList = async params => {
     try {
       this.setState({
-        loading: true,
-      });
-      const res = await goodsList({ ...params });
+        loading: true
+      })
+      const res = await goodsList({ ...params })
       this.setState({
         loading: false,
         pagination: { ...this.state.pagination, total: res.data.total },
-        allList: res.data.goods,
-      });
+        allList: res.data.goods
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   /**
    * 分页变动
    */
   handleTableChange = pagination => {
-    this.initData({ ...this.state.queryParams }, { ...pagination });
-  };
+    this.initData({ ...this.state.queryParams }, { ...pagination })
+  }
 
   /**
    * 搜索
@@ -147,13 +148,13 @@ class Goods extends React.Component {
   handleSearch = value => {
     this.setState(
       {
-        queryParams: { ...this.state.queryParams, query: value },
+        queryParams: { ...this.state.queryParams, query: value }
       },
       () => {
-        this.initData({ ...this.state.queryParams });
-      },
-    );
-  };
+        this.initData({ ...this.state.queryParams })
+      }
+    )
+  }
 
   /**
    * 新增、修改
@@ -162,32 +163,32 @@ class Goods extends React.Component {
     router.push({
       pathname: '/goods/add',
       query: {
-        goodsId: goodsId,
-      },
-    });
-  };
+        goodsId: goodsId
+      }
+    })
+  }
 
   handlePageJump = () => {
-    router.push('/goods/add');
-  };
+    router.push('/goods/add')
+  }
 
   /**
    * 删除
    */
   handleDelete = async id => {
     try {
-      const res = await goodsDelete(id);
+      const res = await goodsDelete(id)
       if (res.meta.status === 200) {
-        message.success('删除成功');
-        this.initData();
+        message.success('删除成功')
+        this.initData()
       }
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   render() {
-    const { loading, allList, pagination } = this.state;
+    const { loading, allList, pagination } = this.state
 
     return (
       <div>
@@ -196,7 +197,7 @@ class Goods extends React.Component {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            margin: '10px 0',
+            margin: '10px 0'
           }}
         >
           <Search
@@ -225,8 +226,9 @@ class Goods extends React.Component {
           onChange={this.handleTableChange}
         />
       </div>
-    );
+    )
   }
 }
 
-export default Goods;
+Goods.displayName = 'Goods'
+export default Goods
