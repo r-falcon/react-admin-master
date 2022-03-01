@@ -71,3 +71,6 @@
 解决：
 - 设置一个100毫秒延迟： setTimeout(() => {this.infoFormRef.current.setFieldsValue(userInfo)}, 100);
 - 将form表单组件化
+
+- 加eslint后报错。解决 Unexpected lexical declaration in case block 的问题
+- 解决：错误翻译，该规则禁止词法声明 (let、const、function 和 class) 出现在 case或default 子句中。出现这种情况，必须加花括号来确定具体的作用域
